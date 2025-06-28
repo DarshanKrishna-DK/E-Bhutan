@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Bhutanese color palette */
+  --bhutan-orange: hsl(21, 90%, 56%);
+  --bhutan-yellow: hsl(48, 98%, 59%);
+  --bhutan-dark: hsl(0, 0%, 10%);
+  
+  /* Base colors with Bhutanese influence */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(48, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(21, 5.9%, 90%);
+  --input: hsl(21, 5.9%, 90%);
+  --primary: hsl(21, 90%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(48, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(48, 98%, 59%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(21, 90%, 56%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(21, 90%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(48, 98%, 59%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Bhutanese cultural patterns and styles */
+.bhutan-gradient {
+  background: linear-gradient(135deg, var(--bhutan-orange), var(--bhutan-yellow));
+}
+
+.bhutan-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      var(--bhutan-orange) 10px,
+      var(--bhutan-orange) 11px
+    );
+  opacity: 0.1;
+}
+
+.dzong-border {
+  border-image: linear-gradient(90deg, var(--bhutan-orange), var(--bhutan-yellow), var(--bhutan-orange)) 1;
+}
+
+.prayer-wheel-spin {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cultural-card {
+  background: linear-gradient(135deg, 
+    hsl(21, 90%, 98%) 0%, 
+    hsl(48, 98%, 98%) 100%);
+  border: 1px solid hsl(21, 20%, 85%);
+}
+
+.traditional-shadow {
+  box-shadow: 
+    0 4px 6px -1px rgba(244, 140, 40, 0.1),
+    0 2px 4px -1px rgba(254, 205, 47, 0.06);
+}
+
+.mountain-silhouette {
+  clip-path: polygon(0% 100%, 5% 85%, 15% 90%, 25% 75%, 35% 80%, 45% 65%, 55% 70%, 65% 55%, 75% 60%, 85% 45%, 95% 50%, 100% 40%, 100% 100%);
+}

@@ -1,0 +1,88 @@
+Create a professional, scalable, modern web application that transforms Bhutan into a digital‑first nation, connecting citizens, businesses, and government services with gamification, NFTs, e‑governance, and a Bhutan‑backed digital currency — all built exclusively on Avalanche.
+
+🌐 Core Modules & Features
+Authentication & Residency Identity
+
+Resident signup/login (email + passwordless wallet).
+
+Residency‑application form.
+
+Mint a Soulbound NFT ID on Avalanche C‑Chain (non‑transferable ERC‑721).
+
+NFT used for auth, KYC status, and residency‑level tracking.
+
+G2B (Government ↔ Business)
+
+Digital business registration flow.
+
+Issue a Business NFT on Avalanche once approved.
+
+Licensing, job‑posting, and application‑tracking dashboards.
+
+Gamified Residency System
+
+Task engine (cultural quizzes, contributions, learning modules).
+
+Earn Brownie Points (on‑chain ERC‑20) → tiered benefits.
+
+Tier logic stored in a smart contract so benefits are provably enforced.
+
+G2C / B2C Job Portal
+
+Post/apply for jobs, attach résumés, track status.
+
+Payments and deposits handled with the platform token (see below).
+
+Digital Marketplace + Mini‑App Store
+
+Residents list Bhutanese goods/services.
+
+Telegram‑style Mini‑Apps run in sandbox iframes—each Mini‑App can sign Avalanche transactions via injected provider.
+
+Platform charges small, on‑chain fee to a government treasury wallet.
+
+Digital Bhutan Currency
+
+Launch “NuBuck” (working title) as an Avalanche Subnet token backed by Bhutan’s Bitcoin reserve.
+
+Native currency for every transaction: marketplace, taxes, salaries, fees.
+
+Built‑in wallet (Core Wallet & MetaMask on Avalanche) with fiat gateway module (optional).
+
+🎨 Cultural Design Integration
+Palette inspired by the Bhutanese flag (orange #f48c28, yellow #fecd2f, white accents).
+
+UI components feature subtle dzong‑roof motifs and traditional patterns.
+
+Hero sections showcase SVG/artwork of Paro Taktsang or Punakha Dzong.
+
+“Cultural Mode” toggle for extra heritage flourishes (animated prayer‑wheel loader, etc.).
+
+🛠️ Tech Stack (Avalanche‑first)
+Layer	Tech Choices	Notes
+Frontend	Next.js + React, Tailwind CSS	SPA with SSR for SEO; connect via ethers.js or avalanche.js.
+Smart Contracts	Solidity (EVM) on Avalanche C‑Chain for NFTs, Brownie Points, governance; Avalanche Subnet token for NuBuck	Use Hardhat + Foundry tests, contract upgrades via OpenZeppelin Upgradeable proxies.
+Backend API	Node.js (Fastify) or Python/Django	Reads blockchain via Avalanche RPC; queues off‑chain tasks (IPFS pinning, emails).
+Database	PostgreSQL	Stores non‑sensitive off‑chain data & indexes.
+Storage	IPFS / Arweave for media & metadata	NFT JSON + images.
+Wallets	Core Wallet, MetaMask (Avalanche network), WalletConnect	Deep‑link and QR flows for mobile.
+
+🚀 Deliverables
+Complete monorepo (frontend, backend, contracts).
+
+Deployed smart contracts on Avalanche Fuji testnet + scripts for mainnet/Subnet migration.
+
+Working admin panel.
+
+Sample Mini‑App in the store (e.g., “Learn Dzongkha” quiz).
+
+Comprehensive docs + architecture diagram.
+
+✅ Acceptance Criteria
+100 % of on‑chain logic lives on Avalanche (C‑Chain + custom Subnet).
+
+End‑to‑end test suite (Jest / Playwright + Hardhat/Foundry).
+
+Responsive design passes Lighthouse > 90.
+
+Code maintainable, with clear module boundaries for future Bhutan‑government teams.
