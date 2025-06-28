@@ -40,7 +40,7 @@ export default function Residency() {
     },
   });
 
-  const { data: applications } = useQuery({
+  const { data: applications = [] } = useQuery<any[]>({
     queryKey: ["/api/residency/applications"],
   });
 
@@ -120,65 +120,135 @@ export default function Residency() {
         </div>
 
         {activeTab === "apply" && (
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Process Steps */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">Application Process</h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Follow these simple steps to become a Digital Resident of Bhutan.
-              </p>
-              
-              <div className="space-y-6">
-                {[
-                  {
-                    step: 1,
-                    title: "Submit Application",
-                    description: "Complete our comprehensive residency application form with your personal details and motivation.",
-                    icon: FileText,
-                  },
-                  {
-                    step: 2,
-                    title: "Government Review",
-                    description: "Our review team will verify your information and assess your application within 5-7 business days.",
-                    icon: User,
-                  },
-                  {
-                    step: 3,
-                    title: "Receive NFT ID",
-                    description: "Upon approval, receive your unique Soulbound NFT digital identity card on the Avalanche blockchain.",
-                    icon: CheckCircle,
-                  },
-                ].map((item) => (
-                  <div key={item.step} className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                      {item.step}
-                    </div>
-                    <div>
-                      <div className="flex items-center mb-2">
-                        <item.icon className="w-5 h-5 text-primary mr-2" />
-                        <h4 className="font-semibold text-foreground">{item.title}</h4>
+          <div className="flex flex-col lg:flex-row gap-12 items-stretch mb-8">
+            {/* Process Steps (left) */}
+            <Card className="flex-1 min-w-0 h-[550px] self-stretch">
+              <CardHeader>
+                <CardTitle>Application Process</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-lg text-muted-foreground mb-8">
+                  Follow these simple steps to become a Digital Resident of Bhutan.
+                </p>
+                <div className="space-y-6">
+                  {[
+                    {
+                      step: 1,
+                      title: "Submit Application",
+                      description: "Complete our comprehensive residency application form with your personal details and motivation.",
+                      icon: FileText,
+                    },
+                    {
+                      step: 2,
+                      title: "Government Review",
+                      description: "Our review team will verify your information and assess your application within 5-7 business days.",
+                      icon: User,
+                    },
+                    {
+                      step: 3,
+                      title: "Receive NFT ID",
+                      description: "Upon approval, receive your unique Soulbound NFT digital identity card on the Avalanche blockchain.",
+                      icon: CheckCircle,
+                    },
+                  ].map((item) => (
+                    <div key={item.step} className="flex items-start space-x-4">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        {item.step}
                       </div>
-                      <p className="text-muted-foreground">{item.description}</p>
+                      <div>
+                        <div className="flex items-center mb-2">
+                          <item.icon className="w-5 h-5 text-primary mr-2" />
+                          <h4 className="font-semibold text-foreground">{item.title}</h4>
+                        </div>
+                        <p className="text-muted-foreground">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Requirements & Timeline (right) */}
+            <div className="flex flex-col gap-6 w-full max-w-xs h-[600px]">
+              {/* Requirements Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Requirements</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Valid Identity</p>
+                      <p className="text-xs text-muted-foreground">Government-issued ID or passport</p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <Card className="mt-8 bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200">
-                <CardContent className="p-6">
-                  <h3 className="font-bold text-foreground mb-2">Benefits of Digital Residency</h3>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Access to digital government services</li>
-                    <li>• Participate in cultural learning programs</li>
-                    <li>• Earn Brownie Points and tier benefits</li>
-                    <li>• Business registration opportunities</li>
-                    <li>• Marketplace access with exclusive discounts</li>
-                  </ul>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Wallet Connection</p>
+                      <p className="text-xs text-muted-foreground">MetaMask or compatible wallet</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Cultural Commitment</p>
+                      <p className="text-xs text-muted-foreground">Willingness to learn about Bhutanese culture</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              {/* Timeline Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Processing Timeline</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">1</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Application Submitted</p>
+                      <p className="text-xs text-muted-foreground">Immediate</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">2</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Under Review</p>
+                      <p className="text-xs text-muted-foreground">1-3 business days</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">3</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Approval & NFT Minting</p>
+                      <p className="text-xs text-muted-foreground">1-2 hours</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">4</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Digital Citizenship Active</p>
+                      <p className="text-xs text-muted-foreground">Access granted</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
+          </div>
+        )}
 
-            {/* Application Form */}
+        {activeTab === "apply" && (
+          <div className="mt-12">
             <Card className="shadow-xl border-t-4 border-primary">
               <CardHeader>
                 <CardTitle className="text-2xl">Residency Application</CardTitle>
