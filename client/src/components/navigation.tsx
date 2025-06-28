@@ -1,23 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Mountain, User } from "lucide-react";
+import { Menu, Mountain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
   const navigation = [
     { name: "Home", href: "/" },
-    { name: "Dashboard", href: "/dashboard" },
     { name: "Residency", href: "/residency" },
     { name: "Jobs", href: "/jobs" },
     { name: "Marketplace", href: "/marketplace" },
     { name: "Cultural", href: "/cultural" },
     { name: "Government", href: "/government" },
   ];
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        setWalletAddress(accounts[0]);
+      } catch (err) {
+        console.error("Wallet connection error:", err);
+      }
+    } else {
+      alert("MetaMask is not installed.");
+    }
+  };
+
+  // Silent check for previously connected wallet (NO POPUP)
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      window.ethereum
+        .request({ method: "eth_accounts" })
+        .then((accounts: string[]) => {
+          if (accounts.length > 0) {
+            setWalletAddress(accounts[0]);
+          }
+        })
+        .catch((err: any) => {
+          console.error("Error checking wallet connection:", err);
+        });
+    }
+  }, []);
 
   const NavLinks = ({ mobile = false }) => (
     <>
@@ -53,14 +82,13 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-9">
             <NavLinks />
-            <Link href="/dashboard">
-              <Button>
-                <User className="w-4 h-4 mr-2" />
-                Dashboard
-              </Button>
-            </Link>
+            <Button onClick={connectWallet}>
+              {walletAddress
+                ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                : "Connect Wallet"}
+            </Button>
           </div>
 
           {/* Mobile Menu */}
@@ -74,12 +102,11 @@ export default function Navigation() {
               <SheetContent side="right" className="w-[300px]">
                 <div className="flex flex-col space-y-4 mt-6">
                   <NavLinks mobile />
-                  <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full justify-start">
-                      <User className="w-4 h-4 mr-2" />
-                      Dashboard
-                    </Button>
-                  </Link>
+                  <Button className="w-full justify-start" onClick={connectWallet}>
+                    {walletAddress
+                      ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+                      : "Connect Wallet"}
+                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
