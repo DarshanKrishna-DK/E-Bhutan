@@ -20,7 +20,7 @@ export default function Navigation() {
   const navigation = [
     { name: "Home", href: "/" },
     { name: "Residency", href: "/residency" },
-    { name: "Jobs", href: "/jobs" },
+    { name: "Jobs", href: "/jobsearch" },
     { name: "Marketplace", href: "/marketplace" },
     { name: "Cultural", href: "/cultural" },
     { name: "Government", href: "/government" },

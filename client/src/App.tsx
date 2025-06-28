@@ -7,12 +7,12 @@ import Navigation from "@/components/navigation";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import Residency from "@/pages/residency";
-import Jobs from "@/pages/jobs";
 import Marketplace from "@/pages/marketplace";
 import CulturalLearning from "@/pages/cultural-learning";
 import Admin from "@/pages/admin";
 import GovernmentServices from "@/pages/government-services";
 import NotFound from "@/pages/not-found";
+import JobSearch from "@/pages/jobsearch";
 
 function Router() {
   return (
@@ -20,11 +20,12 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/residency" component={Residency} />
-      <Route path="/jobs" component={Jobs} />
+      <Route path="/jobsearch" component={JobSearch} />
       <Route path="/marketplace" component={Marketplace} />
       <Route path="/cultural" component={CulturalLearning} />
       <Route path="/government" component={GovernmentServices} />
       <Route path="/admin" component={Admin} />
+      <Route path="/jobsearch" component={JobSearch} />
       <Route component={NotFound} />
     </Switch>
   );
