@@ -17,9 +17,15 @@ import { FileText, CheckCircle, Clock, X, User, Calendar } from "lucide-react";
 import { getStatusColor, formatDate } from "@/lib/utils";
 import { z } from "zod";
 import { BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
+import { Progress } from "@/components/ui/progress";
 
-const formSchema = insertResidencyApplicationSchema.extend({
-  agreeToTerms: z.boolean().refine(val => val === true, "You must agree to the terms"),
+// Update schema to match new fields
+const formSchema = z.object({
+  fullName: z.string().min(1, "Full Name is required"),
+  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  nationality: z.string().min(1, "Nationality is required"),
+  occupation: z.string().min(1, "Occupation is required"),
+  reason: z.string().min(1, "Reason is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -28,15 +34,20 @@ export default function Residency() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"apply" | "status">("apply");
 
+  // Stepper state
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+  const nextStep = () => setCurrentStep((s) => Math.min(s + 1, totalSteps));
+  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 1));
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      countryOfOrigin: "",
-      reasonForResidency: "",
-      agreeToTerms: false,
+      fullName: "",
+      dateOfBirth: "",
+      nationality: "",
+      occupation: "",
+      reason: "",
     },
   });
 
@@ -46,9 +57,8 @@ export default function Residency() {
 
   const applyMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      const { agreeToTerms, ...applicationData } = data;
       await apiRequest("POST", "/api/residency/apply", {
-        ...applicationData,
+        ...data,
         userId: 1, // Mock user ID
       });
     },
@@ -58,8 +68,9 @@ export default function Residency() {
         description: "Your residency application has been submitted successfully!",
       });
       form.reset();
+      setCurrentStep(1);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error",
         description: error.message,
@@ -71,11 +82,6 @@ export default function Residency() {
   const onSubmit = (data: FormData) => {
     applyMutation.mutate(data);
   };
-
-  const countries = [
-    "United States", "United Kingdom", "Canada", "Australia", "India", "China", "Japan", 
-    "Germany", "France", "Italy", "Spain", "Netherlands", "Switzerland", "Sweden", "Other"
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 relative overflow-hidden">
@@ -249,197 +255,181 @@ export default function Residency() {
 
         {activeTab === "apply" && (
           <div className="mt-12">
-            <Card className="shadow-xl border-t-4 border-primary">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Residency Application</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Application Form</CardTitle>
+                  <div className="text-sm text-muted-foreground">
+                    Step {currentStep} of {totalSteps}
+                  </div>
+                </div>
+                <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
               </CardHeader>
               <CardContent>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>First Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter first name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter last name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    {currentStep === 1 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Personal Information</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="fullName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Full Name *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your full name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="your@email.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          <FormField
+                            control={form.control}
+                            name="dateOfBirth"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Date of Birth *</FormLabel>
+                                <FormControl>
+                                  <Input type="date" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                    <FormField
-                      control={form.control}
-                      name="countryOfOrigin"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Country of Origin</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select your country" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem key={country} value={country}>
-                                  {country}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        <FormField
+                          control={form.control}
+                          name="nationality"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nationality *</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select your nationality" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="us">United States</SelectItem>
+                                  <SelectItem value="uk">United Kingdom</SelectItem>
+                                  <SelectItem value="ca">Canada</SelectItem>
+                                  <SelectItem value="au">Australia</SelectItem>
+                                  <SelectItem value="de">Germany</SelectItem>
+                                  <SelectItem value="fr">France</SelectItem>
+                                  <SelectItem value="jp">Japan</SelectItem>
+                                  <SelectItem value="in">India</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
 
-                    <FormField
-                      control={form.control}
-                      name="reasonForResidency"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Reason for Digital Residency</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Tell us why you want to become a digital resident of Bhutan. What interests you about our culture and digital transformation journey?"
-                              className="h-32"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {currentStep === 2 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Professional Information</h3>
+                        <FormField
+                          control={form.control}
+                          name="occupation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Current Occupation *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g., Software Developer, Teacher, Student" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
 
-                    <FormField
-                      control={form.control}
-                      name="agreeToTerms"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel className="text-sm">
-                              I agree to the terms and conditions of Digital Bhutan residency
-                            </FormLabel>
-                            <FormMessage />
+                    {currentStep === 3 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Application Statement</h3>
+                        <FormField
+                          control={form.control}
+                          name="reason"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Why do you want to become a Digital Bhutan resident? *</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder="Please explain your motivation for joining Digital Bhutan and how you plan to contribute to the community..."
+                                  className="min-h-[120px]"
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
+
+                    {currentStep === 4 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Review & Submit</h3>
+                        <div className="bg-muted rounded-lg p-4 space-y-3">
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Full Name</p>
+                              <p className="text-foreground">{form.getValues("fullName")}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Date of Birth</p>
+                              <p className="text-foreground">{form.getValues("dateOfBirth")}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Nationality</p>
+                              <p className="text-foreground">{form.getValues("nationality")}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Occupation</p>
+                              <p className="text-foreground">{form.getValues("occupation")}</p>
+                            </div>
                           </div>
-                        </FormItem>
-                      )}
-                    />
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Application Statement</p>
+                            <p className="text-foreground">{form.getValues("reason")}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      size="lg"
-                      disabled={applyMutation.isPending}
-                    >
-                      {applyMutation.isPending ? "Submitting..." : "Submit Application"}
-                    </Button>
+                    <div className="flex justify-between pt-6">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={prevStep}
+                        disabled={currentStep === 1}
+                      >
+                        Previous
+                      </Button>
+                      
+                      {currentStep < totalSteps ? (
+                        <Button type="button" onClick={nextStep}>
+                          Next
+                        </Button>
+                      ) : (
+                        <Button 
+                          type="submit" 
+                          disabled={applyMutation.isPending}
+                          className="bhutan-gradient text-white"
+                        >
+                          {applyMutation.isPending ? "Submitting..." : "Submit Application"}
+                        </Button>
+                      )}
+                    </div>
                   </form>
                 </Form>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {activeTab === "status" && (
-          <div className="max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Application Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {applications?.length ? (
-                  <div className="space-y-4">
-                    {applications.map((app: any) => (
-                      <Card key={app.id} className="border-l-4 border-primary">
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <h3 className="font-semibold text-lg">
-                                {app.firstName} {app.lastName}
-                              </h3>
-                              <p className="text-muted-foreground">{app.email}</p>
-                              <p className="text-sm text-muted-foreground">
-                                From: {app.countryOfOrigin}
-                              </p>
-                            </div>
-                            <Badge className={getStatusColor(app.status)}>
-                              {app.status === "pending" && <Clock className="w-3 h-3 mr-1" />}
-                              {app.status === "approved" && <CheckCircle className="w-3 h-3 mr-1" />}
-                              {app.status === "rejected" && <X className="w-3 h-3 mr-1" />}
-                              {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-                            </Badge>
-                          </div>
-                          
-                          <p className="text-sm text-muted-foreground mb-4 italic">
-                            "{app.reasonForResidency}"
-                          </p>
-                          
-                          <div className="flex items-center justify-between text-sm text-muted-foreground">
-                            <span>Applied: {formatDate(app.createdAt)}</span>
-                            {app.reviewedAt && (
-                              <span>Reviewed: {formatDate(app.reviewedAt)}</span>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-foreground mb-2">No Applications Found</h3>
-                    <p className="text-muted-foreground">
-                      You haven't submitted any residency applications yet.
-                    </p>
-                    <Button
-                      onClick={() => setActiveTab("apply")}
-                      className="mt-4"
-                    >
-                      Start Application
-                    </Button>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>
