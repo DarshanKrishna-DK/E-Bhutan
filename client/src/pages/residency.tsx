@@ -21,11 +21,37 @@ import { Progress } from "@/components/ui/progress";
 
 // Update schema to match new fields
 const formSchema = z.object({
-  fullName: z.string().min(1, "Full Name is required"),
-  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  email: z.string().email("Valid email is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  dateOfBirth: z.string().min(1, "Date of birth is required"),
+  gender: z.string().min(1, "Gender is required"),
+  placeOfBirth: z.string().min(1, "Place of birth is required"),
   nationality: z.string().min(1, "Nationality is required"),
+  phone: z.string().min(1, "Phone number is required"),
+  address: z.string().min(1, "Current address is required"),
   occupation: z.string().min(1, "Occupation is required"),
   reason: z.string().min(1, "Reason is required"),
+  documentType: z.string().min(1, "Document type is required"),
+  documentNumber: z.string().min(1, "Document number is required"),
+  issuingCountry: z.string().min(1, "Issuing country is required"),
+  dateOfIssue: z.string().min(1, "Date of issue is required"),
+  photoTitle: z.string().min(1, "Photo title is required"),
+  photoFile: z
+    .any()
+    .refine((file) => file instanceof File || (file && file.length > 0), "Photo is required"),
+  purpose: z.string().min(1, "Purpose is required"),
+  agreeTerms: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the terms and conditions",
+  }),
+  declareTruth: z.boolean().refine((val) => val === true, {
+    message: "You must declare the information is true",
+  }),
+  cardNumber: z.string().min(1, "Card number is required"),
+  cardName: z.string().min(1, "Name on card is required"),
+  cardExpiry: z.string().min(1, "Expiry date is required"),
+  cardCvc: z.string().min(1, "CVV/CVC is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -36,18 +62,38 @@ export default function Residency() {
 
   // Stepper state
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 6;
   const nextStep = () => setCurrentStep((s) => Math.min(s + 1, totalSteps));
   const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 1));
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
       dateOfBirth: "",
+      gender: "",
+      placeOfBirth: "",
       nationality: "",
+      phone: "",
+      address: "",
       occupation: "",
       reason: "",
+      documentType: "",
+      documentNumber: "",
+      issuingCountry: "",
+      dateOfIssue: "",
+      photoTitle: "",
+      photoFile: undefined,
+      purpose: "",
+      agreeTerms: false,
+      declareTruth: false,
+      cardNumber: "",
+      cardName: "",
+      cardExpiry: "",
+      cardCvc: "",
     },
   });
 
@@ -270,22 +316,69 @@ export default function Residency() {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     {currentStep === 1 && (
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">Personal Information</h3>
+                        <h3 className="text-lg font-semibold">Account Information</h3>
                         <div className="grid md:grid-cols-2 gap-4">
                           <FormField
                             control={form.control}
-                            name="fullName"
+                            name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Full Name *</FormLabel>
+                                <FormLabel>Email *</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Enter your full name" {...field} />
+                                  <Input type="email" placeholder="Enter your email" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
 
+                          <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password *</FormLabel>
+                                <FormControl>
+                                  <Input type="password" placeholder="Enter a password" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 2 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Personal Information</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="firstName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>First Name *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your first name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Last Name *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your last name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                           <FormField
                             control={form.control}
                             name="dateOfBirth"
@@ -299,50 +392,76 @@ export default function Residency() {
                               </FormItem>
                             )}
                           />
-                        </div>
-
-                        <FormField
-                          control={form.control}
-                          name="nationality"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nationality *</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormField
+                            control={form.control}
+                            name="gender"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Gender *</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select gender" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="male">Male</SelectItem>
+                                    <SelectItem value="female">Female</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="placeOfBirth"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Place of Birth *</FormLabel>
                                 <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select your nationality" />
-                                  </SelectTrigger>
+                                  <Input placeholder="Enter your place of birth" {...field} />
                                 </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="us">United States</SelectItem>
-                                  <SelectItem value="uk">United Kingdom</SelectItem>
-                                  <SelectItem value="ca">Canada</SelectItem>
-                                  <SelectItem value="au">Australia</SelectItem>
-                                  <SelectItem value="de">Germany</SelectItem>
-                                  <SelectItem value="fr">France</SelectItem>
-                                  <SelectItem value="jp">Japan</SelectItem>
-                                  <SelectItem value="in">India</SelectItem>
-                                  <SelectItem value="other">Other</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-
-                    {currentStep === 2 && (
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">Professional Information</h3>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="nationality"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nationality *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your nationality" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Phone Number *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your phone number" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                         <FormField
                           control={form.control}
-                          name="occupation"
+                          name="address"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Current Occupation *</FormLabel>
+                              <FormLabel>Current Address *</FormLabel>
                               <FormControl>
-                                <Input placeholder="e.g., Software Developer, Teacher, Student" {...field} />
+                                <Textarea placeholder="Enter your current address" className="min-h-[80px]" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -353,20 +472,156 @@ export default function Residency() {
 
                     {currentStep === 3 && (
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">Application Statement</h3>
+                        <h3 className="text-lg font-semibold">Identity Document</h3>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="documentType"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Document Type *</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select document type" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="passport">Passport</SelectItem>
+                                    <SelectItem value="eu_identity_card">EU identity card</SelectItem>
+                                    <SelectItem value="national_id_card">National ID card</SelectItem>
+                                    <SelectItem value="driving_license">Driving license</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="documentNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Document Number *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter document number" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="issuingCountry"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Issuing Country *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter issuing country" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="dateOfIssue"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Date of Issue *</FormLabel>
+                                <FormControl>
+                                  <Input type="date" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 4 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Digital Photo</h3>
                         <FormField
                           control={form.control}
-                          name="reason"
+                          name="photoFile"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Why do you want to become a Digital Bhutan resident? *</FormLabel>
+                              <FormLabel>Choose File *</FormLabel>
                               <FormControl>
-                                <Textarea 
-                                  placeholder="Please explain your motivation for joining Digital Bhutan and how you plan to contribute to the community..."
-                                  className="min-h-[120px]"
-                                  {...field} 
+                                <Input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => field.onChange(e.target.files?.[0])}
                                 />
                               </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Upload a recent (within 6 months) passport-size photo of your face, on a neutral background. This will be used for biometric verification.
+                        </p>
+                      </div>
+                    )}
+
+                    {currentStep === 5 && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold">Final Declarations</h3>
+                        <FormField
+                          control={form.control}
+                          name="purpose"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Purpose of Application *</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describe your purpose for applying. You may write a long essay here."
+                                  className="min-h-[120px]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="agreeTerms"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                  I explicitly agree to e-Bhutan's terms and conditions and, including how my personal data will be processed for identity verification and e-Residency issuance.
+                                </FormLabel>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="declareTruth"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                  I declare that all information provided in this application is true, accurate, and complete to the best of my knowledge
+                                </FormLabel>
+                              </div>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -374,32 +629,65 @@ export default function Residency() {
                       </div>
                     )}
 
-                    {currentStep === 4 && (
+                    {currentStep === 6 && (
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">Review & Submit</h3>
-                        <div className="bg-muted rounded-lg p-4 space-y-3">
-                          <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                              <p className="text-sm font-medium text-muted-foreground">Full Name</p>
-                              <p className="text-foreground">{form.getValues("fullName")}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-muted-foreground">Date of Birth</p>
-                              <p className="text-foreground">{form.getValues("dateOfBirth")}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-muted-foreground">Nationality</p>
-                              <p className="text-foreground">{form.getValues("nationality")}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-muted-foreground">Occupation</p>
-                              <p className="text-foreground">{form.getValues("occupation")}</p>
-                            </div>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-muted-foreground">Application Statement</p>
-                            <p className="text-foreground">{form.getValues("reason")}</p>
-                          </div>
+                        <h3 className="text-lg font-semibold">Payment</h3>
+                        <p className="text-sm text-muted-foreground">
+                          A state fee of [Insert Fee Amount, e.g., €150] is required to process your application. Your application will not be processed until this payment is successfully completed.
+                        </p>
+                        <FormField
+                          control={form.control}
+                          name="cardNumber"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Card Number *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="1234 5678 9012 3456" maxLength={19} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="cardName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Name on Card *</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Name as shown on card" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <div className="grid grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="cardExpiry"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Expiry Date *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="MM/YY" maxLength={5} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="cardCvc"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>CVV/CVC *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="123" maxLength={4} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
                       </div>
                     )}
