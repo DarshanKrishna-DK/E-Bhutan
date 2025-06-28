@@ -22,8 +22,15 @@ import { Link } from "wouter";
 import { formatBrowniePoints, getTierName, getTierBenefits } from "@/lib/utils";
 import { BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
 
+type DashboardStats = {
+  totalResidents: number;
+  totalBusinesses: number;
+  totalBrowniePoints: number;
+  satisfactionRate: number;
+};
+
 export default function Dashboard() {
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
   });
 

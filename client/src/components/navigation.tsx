@@ -5,6 +5,13 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Mountain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Extend the Window interface to include ethereum
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +20,7 @@ export default function Navigation() {
   const navigation = [
     { name: "Home", href: "/" },
     { name: "Residency", href: "/residency" },
-    { name: "Jobs", href: "/jobs" },
+    { name: "Jobs", href: "/jobsearch" },
     { name: "Marketplace", href: "/marketplace" },
     { name: "Cultural", href: "/cultural" },
     { name: "Government", href: "/government" },

@@ -215,7 +215,7 @@ export default function CulturalLearning() {
                       <div>
                         <h4 className="font-semibold text-foreground">{type.label}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {activities?.filter((a: any) => a.type === type.type).length || 0} available
+                          {(Array.isArray(activities) ? activities : []).filter((a: any) => a.type === type.type).length} available
                         </p>
                       </div>
                     </div>
@@ -239,7 +239,7 @@ export default function CulturalLearning() {
                   </Card>
                 ))}
               </div>
-            ) : activities?.length ? (
+            ) : Array.isArray(activities) && activities.length ? (
               <div className="grid md:grid-cols-2 gap-6">
                 {activities.map((activity: any) => {
                   const isCompleted = mockUser.completedActivities.includes(activity.id);
