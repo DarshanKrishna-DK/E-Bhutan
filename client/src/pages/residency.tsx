@@ -7,23 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { FileText, CheckCircle, Clock, X, User, Calendar } from "lucide-react";
+import { FileText, CheckCircle, Clock } from "lucide-react";
 import { getStatusColor, formatDate } from "@/lib/utils";
 import { z } from "zod";
 import { BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
 import { Progress } from "@/components/ui/progress";
 import { ethers } from "ethers";
-
-// Update schema to match new fields
-const formSchema = z.object({
-  email: z.string().email("Valid email is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  occupation: z.string().min(1, "Occupation is required"),
-  reason: z.string().min(1, "Reason is required"),
-  wallet: z.string().min(1, "Wallet address is required"),
-import { Progress } from "@/components/ui/progress";
 
 // Update schema to match new fields
 const formSchema = z.object({
@@ -58,6 +51,7 @@ const formSchema = z.object({
   cardName: z.string().min(1, "Name on card is required"),
   cardExpiry: z.string().min(1, "Expiry date is required"),
   cardCvc: z.string().min(1, "CVV/CVC is required"),
+  wallet: z.string().min(1, "Wallet address is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -107,6 +101,7 @@ export default function Residency() {
       cardName: "",
       cardExpiry: "",
       cardCvc: "",
+      wallet: "",
     },
   });
 
@@ -122,7 +117,6 @@ export default function Residency() {
     mutationFn: async (data: FormData) => {
       await apiRequest("POST", "/api/residency/apply", {
         ...data,
-        ...data,
         userId: 1, // Mock user ID
       });
     },
@@ -133,9 +127,7 @@ export default function Residency() {
       });
       form.reset();
       setCurrentStep(1);
-      setCurrentStep(1);
     },
-    onError: (error: any) => {
     onError: (error: any) => {
       toast({
         title: "Error",
@@ -250,69 +242,7 @@ export default function Residency() {
                       <p className="text-xs text-muted-foreground">Willingness to learn about Bhutanese culture</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-              {/* Timeline Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Processing Timeline</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">1</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Application Submitted</p>
-                      <p className="text-xs text-muted-foreground">Immediate</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">2</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Under Review</p>
-                      <p className="text-xs text-muted-foreground">1-3 business days</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">3</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Approval & NFT Minting</p>
-                      <p className="text-xs text-muted-foreground">1-2 hours</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">4</span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Digital Citizenship Active</p>
-                      <p className="text-xs text-muted-foreground">Access granted</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "apply" && (
-          <div className="mt-12">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Application Form</CardTitle>
-                  <div className="text-sm text-muted-foreground">
-                    Step {currentStep} of {totalSteps}
-                  </div>
                 </div>
-                <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
-                </div>
-                <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -691,6 +621,14 @@ export default function Residency() {
                               </FormItem>
                             )}
                           />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button type="button" onClick={connectWallet}>
+                            Connect MetaMask
+                          </Button>
+                          <span className="text-xs text-muted-foreground">
+                            {form.getValues("wallet") ? `Connected: ${form.getValues("wallet")}` : "No wallet connected"}
+                          </span>
                         </div>
                       </div>
                     )}
