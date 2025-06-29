@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import HeroSection from "@/components/hero-section";
 import ServiceCard from "@/components/service-card";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -29,10 +29,14 @@ import {
   Briefcase,
   Globe,
   UserCheck,
-  Smartphone
+  Smartphone,
+  Wallet,
+  HandCoins,
+  ShieldCheck
 } from "lucide-react";
 import { CulturalPattern, DzongRoof, BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
 import { Link } from "wouter";
+/* import WalletConnector from "@/components/wallet-connector"; */
 
 export default function Landing() {
   const { data: stats } = useQuery({
@@ -70,6 +74,11 @@ export default function Landing() {
       gradient: "orange" as const,
     },
   ];
+
+  // Temporary mock values for wallet connection and balance
+  // Replace with your actual wallet hook/context as needed
+  const isConnected = false;
+  const balance = "0.00";
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -194,6 +203,107 @@ export default function Landing() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* NuBuck Digital Currency Section */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-foreground mb-4">NuBuck Digital Currency</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              The official digital currency of Bhutan, backed by Bitcoin reserves and powered by Avalanche
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Wallet Preview */}
+            <div className="lg:col-span-2">
+              <Card className="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-2xl text-white">NuBuck Wallet</CardTitle>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-sm text-gray-300">
+                        {typeof isConnected !== "undefined" ? (isConnected ? "Connected" : "Disconnected") : "Disconnected"}
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Balance Display */}
+                  <Card className="bhutan-gradient">
+                    <CardContent className="p-6 text-center">
+                      <p className="text-sm text-white/80 mb-2">Total Balance</p>
+                      <p className="text-4xl font-bold text-white">{typeof balance !== "undefined" ? balance : "0.00"}</p>
+                      <p className="text-lg text-white/90">NuBuck (NBK)</p>
+                      <p className="text-sm text-white/70 mt-2">≈ $0.00 USD</p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Quick Actions */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Link href="/wallet">
+                      <Button className="w-full bg-white/10 hover:bg-white/20 text-white border-0 h-16">
+                        <div className="text-center">
+                          <Wallet className="w-6 h-6 mx-auto mb-1" />
+                          <p className="text-sm">Manage Wallet</p>
+                        </div>
+                      </Button>
+                    </Link>
+                    {/* WalletConnector component removed due to missing module */}
+                    {/* <WalletConnector /> */}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Features */}
+            <div className="space-y-6">
+              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800">
+                <CardHeader>
+                  <CardTitle className="text-lg">Buy NuBuck</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-sm text-muted-foreground">
+                    <p>
+                      Exchange rate: <span className="font-semibold text-bhutan-orange">1 USD = 0.6667 NBK</span>
+                    </p>
+                  </div>
+                  <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-lg">
+                    <Coins className="w-5 h-5 mr-2" />
+                    Buy NuBuck
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50 border-green-200 dark:border-green-800">
+                <CardHeader>
+                  <CardTitle className="text-lg">Accepting NuBuck</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Learn how to accept NuBuck payments for your business and benefit from lower transaction fees.
+                  </p>
+                  <Link href="/accept-nubuck">
+                    <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:shadow-lg">
+                      <HandCoins className="w-5 h-5 mr-2" />
+                      Get Started as a Merchant
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/wallet">
+              <Button size="lg" variant="outline">
+                Access Your NuBuck Wallet
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
