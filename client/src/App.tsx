@@ -13,6 +13,7 @@ import Admin from "@/pages/admin";
 import GovernmentServices from "@/pages/government-services";
 import NotFound from "@/pages/not-found";
 import JobSearch from "@/pages/jobsearch";
+import BusinessApplication from "./pages/businessapplication";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/government" component={GovernmentServices} />
       <Route path="/admin" component={Admin} />
       <Route path="/jobsearch" component={JobSearch} />
+      <Route path="/businessapplication" component={BusinessApplication}/>
       <Route component={NotFound} />
     </Switch>
   );

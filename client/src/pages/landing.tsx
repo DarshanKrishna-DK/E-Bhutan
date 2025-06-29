@@ -25,7 +25,11 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  Mountain
+  Mountain,
+  Briefcase,
+  Globe,
+  UserCheck,
+  Smartphone
 } from "lucide-react";
 import { CulturalPattern, DzongRoof, BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
 import { Link } from "wouter";
@@ -277,89 +281,45 @@ export default function Landing() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">Digital Job Portal</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Connect talented individuals with businesses across Bhutan. Post jobs, apply for positions, and build your career in the digital kingdom.
+              Empowering Bhutan's workforce and businesses through a unified digital platform for job seekers and employers.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div>
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-foreground mb-6">Find Your Perfect Job</h3>
-                  <div className="space-y-4 mb-6">
-                    <Input placeholder="e.g. Software Developer" disabled />
-                    <Select disabled>
-                      <SelectTrigger>
-                        <SelectValue placeholder="All Categories" />
-                      </SelectTrigger>
-                    </Select>
-                  </div>
-                  <Button className="w-full mb-4">
-                    <Search className="w-4 h-4 mr-2" />
-                    Search Jobs
-                  </Button>
-                  <Button variant="secondary" className="w-full">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Post a Job
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="lg:col-span-2 space-y-6">
-              {[
-                {
-                  title: "Senior Software Developer",
-                  company: "Digital Bhutan Initiative",
-                  location: "Thimphu, Bhutan",
-                  type: "Full-time",
-                  skills: ["React", "Node.js", "Blockchain", "Avalanche"],
-                  posted: "2 days ago"
-                },
-                {
-                  title: "Tourism Marketing Specialist", 
-                  company: "Bhutan Tourism Board",
-                  location: "Paro, Bhutan",
-                  type: "Contract",
-                  skills: ["Digital Marketing", "Content Strategy", "Social Media"],
-                  posted: "1 week ago"
-                }
-              ].map((job, index) => (
-                <Card key={index} className="shadow-lg border-l-4 border-primary">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h4 className="text-xl font-bold text-foreground mb-2">{job.title}</h4>
-                        <p className="text-primary font-semibold">{job.company}</p>
-                        <p className="text-muted-foreground text-sm">
-                          <MapPin className="inline w-4 h-4 mr-1" />
-                          {job.location}
-                        </p>
-                      </div>
-                      <Badge>{job.type}</Badge>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 mb-4">
-                      {job.skills.map((skill, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">{skill}</Badge>
-                      ))}
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-muted-foreground">
-                        <Clock className="inline w-4 h-4 mr-1" />
-                        Posted {job.posted}
-                      </div>
-                      <Button size="sm">Apply Now</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-orange-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <Briefcase className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Find Opportunities</h4>
+                <p className="text-muted-foreground">
+                  Explore a wide range of job openings across Bhutan, from tech to tourism, and discover your next career move.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-yellow-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <Globe className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Connect Digitally</h4>
+                <p className="text-muted-foreground">
+                  Seamlessly connect with employers and candidates through a secure, blockchain-powered digital ecosystem.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-orange-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <UserCheck className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Verified Talent & Employers</h4>
+                <p className="text-muted-foreground">
+                  All users are verified, ensuring trust and authenticity for both job seekers and businesses.
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="text-center mt-8">
-            <Link href="/jobs">
+            <Link href="/jobsearch">
               <Button size="lg" variant="outline">
                 View All Jobs
               </Button>
@@ -368,83 +328,53 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Marketplace Preview */}
+      {/* Marketplace & Mini-Apps Preview */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Digital Marketplace</h2>
+            <h2 className="text-4xl font-bold text-foreground mb-4">Marketplace & Mini-Apps</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Discover authentic Bhutanese products, services, and experiences. Support local artisans and businesses.
+              Discover, trade, and interact with authentic Bhutanese products and digital tools. Empower local artisans, businesses, and your own digital journey.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {[
-              { name: "Traditional Kira", price: 245, points: 50, icon: "👘" },
-              { name: "Singing Bowl Set", price: 89, points: 25, icon: "🎵" },
-              { name: "Prayer Flag Set", price: 32, points: 15, icon: "🎌" },
-              { name: "Himalayan Tea", price: 28, points: 12, icon: "🍵" }
-            ].map((product, index) => (
-              <Card key={index} className="shadow-lg overflow-hidden border border-gray-200">
-                <div className="aspect-video bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center text-4xl">
-                  {product.icon}
-                </div>
-                <CardContent className="p-6">
-                  <h4 className="font-bold text-foreground mb-2">{product.name}</h4>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl font-bold text-primary">${product.price}</span>
-                    <Badge className="bg-yellow-500 text-white">+{product.points} Points</Badge>
-                  </div>
-                  <Button className="w-full">
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Mini-App Store Preview */}
-          <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border border-orange-200">
-            <CardContent className="p-8">
-              <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-foreground mb-4">Mini-App Store</h3>
-                <p className="text-xl text-muted-foreground">
-                  Discover mini-applications that enhance your Digital Bhutan experience
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-orange-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <ShoppingCart className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Support Local Artisans</h4>
+                <p className="text-muted-foreground">
+                  Purchase unique crafts, textiles, and goods directly from Bhutanese creators, helping preserve culture and empower communities.
                 </p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                {[
-                  { name: "Learn Dzongkha", icon: Languages, rating: 4.9, users: "2.3k" },
-                  { name: "NuBuck Wallet", icon: Coins, rating: 4.7, users: "1.8k" },
-                  { name: "Carbon Tracker", icon: Sprout, rating: 4.2, users: "956" }
-                ].map((app, index) => (
-                  <Card key={index} className="shadow-lg">
-                    <CardContent className="p-6">
-                      <div className="w-16 h-16 bhutan-gradient rounded-xl flex items-center justify-center mb-4">
-                        <app.icon className="text-white w-8 h-8" />
-                      </div>
-                      <h4 className="font-bold text-foreground mb-2">{app.name}</h4>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center text-yellow-500">
-                          <Star className="w-4 h-4 fill-current" />
-                          <span className="ml-1 text-muted-foreground text-sm">{app.rating}</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">{app.users} users</span>
-                      </div>
-                      <Button className="w-full" size="sm">Launch App</Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-yellow-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <Sprout className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Earn & Redeem Brownie Points</h4>
+                <p className="text-muted-foreground">
+                  Engage in the marketplace and mini-apps to earn Brownie Points, which can be redeemed for rewards, discounts, and special experiences.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="group relative overflow-hidden border-0 shadow-xl transition-transform hover:-translate-y-2 bg-white">
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-orange-100 opacity-20 blur-2xl group-hover:scale-110 transition-transform" />
+              <CardContent className="p-8 flex flex-col items-center text-center relative z-10">
+                <Smartphone className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h4 className="font-bold text-foreground mb-2 text-xl">Access Powerful Mini-Apps</h4>
+                <p className="text-muted-foreground">
+                  Use digital tools for learning, finance, and culture—like language apps, digital wallets, and eco-trackers—right inside the platform.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="text-center mt-8">
             <Link href="/marketplace">
               <Button size="lg" variant="outline">
-                Explore Marketplace
+                Go to Marketplace
               </Button>
             </Link>
           </div>

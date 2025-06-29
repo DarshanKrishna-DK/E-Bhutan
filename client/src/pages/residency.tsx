@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { FileText, CheckCircle, Clock } from "lucide-react";
+import { FileText, CheckCircle, Clock, Shield, Globe, Heart, UserPlus } from "lucide-react";
 import { getStatusColor, formatDate } from "@/lib/utils";
 import { z } from "zod";
 import { BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
@@ -872,13 +872,71 @@ export default function Residency() {
         </div>
 
         {activeTab === "apply" && (
-          <div className="mt-12">
-            <Card>
+          <div className="mt-12 space-y-8">
+            {/* Residency Benefits Cards */}
+            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border-blue-200 dark:border-blue-800">
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Application Form</CardTitle>
-                  <div className="text-sm text-muted-foreground">
-                    Step {currentStep} of {totalSteps}
+                <CardTitle className="flex items-center space-x-2">
+                  <Shield className="w-6 h-6 text-blue-600" />
+                  <span>Digital Residency Benefits</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mt-1">
+                      <Shield className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">NFT Digital Identity</h3>
+                      <p className="text-sm text-muted-foreground">Soulbound NFT representing your digital citizenship</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center mt-1">
+                      <Globe className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Global Recognition</h3>
+                      <p className="text-sm text-muted-foreground">Internationally recognized blockchain credentials</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center mt-1">
+                      <Heart className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Cultural Participation</h3>
+                      <p className="text-sm text-muted-foreground">Earn Brownie Points through cultural engagement</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center mt-1">
+                      <UserPlus className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Community Access</h3>
+                      <p className="text-sm text-muted-foreground">Access to marketplace, jobs, and mini-apps</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Requirements & Processing Timeline side by side */}
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Requirements */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Requirements</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium">Valid Identity</p>
+                      <p className="text-xs text-muted-foreground">Government-issued ID or passport</p>
+                    </div>
                   </div>
                   <div className="flex items-start space-x-2">
                     <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
@@ -894,7 +952,74 @@ export default function Residency() {
                       <p className="text-xs text-muted-foreground">Willingness to learn about Bhutanese culture</p>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Processing Timeline */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Processing Timeline</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">1</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Application Submitted</p>
+                      <p className="text-xs text-muted-foreground">We have received your application</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">2</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Identity Verification</p>
+                      <p className="text-xs text-muted-foreground">Your identity will be verified</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">3</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Application Review</p>
+                      <p className="text-xs text-muted-foreground">We will review your application</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">4</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Approval & NFT Minting</p>
+                      <p className="text-xs text-muted-foreground">Your NFT digital identity will be minted</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">5</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Completion</p>
+                      <p className="text-xs text-muted-foreground">You will receive a notification upon completion</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Application Form */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Application Form</CardTitle>
+                  <div className="text-sm text-muted-foreground">
+                    Step {currentStep} of {totalSteps}
+                  </div>
                 </div>
+                <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
               </CardHeader>
               <CardContent>
                 <Form {...form}>

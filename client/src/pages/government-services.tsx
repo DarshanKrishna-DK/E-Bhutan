@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DzongRoof, BuddhaFace, Stupa } from "@/components/cultural-patterns";
+import { useLocation } from "wouter";
 
 const serviceApplicationSchema = z.object({
   serviceName: z.string().min(1, "Service is required"),
@@ -47,6 +48,7 @@ interface GovernmentService {
   requiredCredentials: string[];
   isActive: boolean;
   contractAddress?: string;
+  applyUrl?: string; // <-- Add this field
 }
 
 const mockServices: GovernmentService[] = [
@@ -59,7 +61,8 @@ const mockServices: GovernmentService[] = [
     fee: "50",
     requiredCredentials: ["identity_verification", "background_check"],
     isActive: true,
-    contractAddress: "0x1234567890123456789012345678901234567890"
+    contractAddress: "0x1234567890123456789012345678901234567890",
+    applyUrl: "/residency"
   },
   {
     id: 2,
@@ -70,7 +73,8 @@ const mockServices: GovernmentService[] = [
     fee: "100",
     requiredCredentials: ["digital_residency", "business_plan"],
     isActive: true,
-    contractAddress: "0x2345678901234567890123456789012345678901"
+    contractAddress: "0x2345678901234567890123456789012345678901",
+    applyUrl: "/businessapplication"
   },
   {
     id: 3,
@@ -122,6 +126,7 @@ export default function GovernmentServices() {
   const { toast } = useToast();
   const [selectedService, setSelectedService] = useState<GovernmentService | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, navigate] = useLocation();
 
   const { data: services = mockServices } = useQuery<GovernmentService[]>({
     queryKey: ["government-services"],
@@ -288,80 +293,17 @@ export default function GovernmentServices() {
                         </div>
                       </div>
 
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            className="w-full mt-4 bg-gradient-to-r from-orange-500 to-yellow-500"
-                            disabled={!service.isActive}
-                            onClick={() => setSelectedService(service)}
-                          >
-                            Apply Now
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                          <DialogHeader>
-                            <DialogTitle>Apply for {service.serviceName}</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                              <h4 className="font-medium text-orange-800 mb-2">Service Details</h4>
-                              <div className="space-y-1 text-sm text-orange-700">
-                                <p><strong>Department:</strong> {service.department}</p>
-                                <p><strong>Processing Time:</strong> {service.processingTime}</p>
-                                <p><strong>Fee:</strong> {service.fee} NuBucks</p>
-                                {service.contractAddress && (
-                                  <p className="flex items-center">
-                                    <strong>Contract:</strong>
-                                    <code className="ml-1 text-xs bg-orange-100 px-1 rounded">
-                                      {service.contractAddress.slice(0, 10)}...
-                                    </code>
-                                    <ExternalLink className="w-3 h-3 ml-1" />
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-
-                            <Form {...form}>
-                              <form onSubmit={form.handleSubmit((data) => {
-                                data.serviceName = service.serviceName;
-                                submitMutation.mutate(data);
-                              })} className="space-y-4">
-                                <FormField
-                                  control={form.control}
-                                  name="notes"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Additional Notes</FormLabel>
-                                      <FormControl>
-                                        <Textarea 
-                                          placeholder="Any additional information or special requirements..."
-                                          {...field} 
-                                        />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-
-                                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                  <div className="flex items-center text-blue-800 text-sm">
-                                    <Shield className="w-4 h-4 mr-2" />
-                                    <span>This application will be processed on the Avalanche blockchain and you will receive an NFT credential upon approval.</span>
-                                  </div>
-                                </div>
-
-                                <Button 
-                                  type="submit" 
-                                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500"
-                                  disabled={isSubmitting}
-                                >
-                                  {isSubmitting ? "Submitting to Blockchain..." : "Submit Application"}
-                                </Button>
-                              </form>
-                            </Form>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                      <Button
+                        className="w-full mt-4 bg-gradient-to-r from-orange-500 to-yellow-500"
+                        disabled={!service.isActive}
+                        onClick={() => {
+                          if (service.applyUrl) {
+                            navigate(service.applyUrl);
+                          }
+                        }}
+                      >
+                        Apply Now
+                      </Button>
                     </CardContent>
                   </Card>
                 );
