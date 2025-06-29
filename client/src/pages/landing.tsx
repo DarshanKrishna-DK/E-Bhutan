@@ -319,7 +319,7 @@ export default function Landing() {
           </div>
 
           <div className="text-center mt-8">
-            <Link href="/jobs">
+            <Link href="/jobsearch">
               <Button size="lg" variant="outline">
                 View All Jobs
               </Button>
