@@ -85,7 +85,8 @@ const mockServices: GovernmentService[] = [
     fee: "25",
     requiredCredentials: ["cultural_assessment", "community_endorsement"],
     isActive: true,
-    contractAddress: "0x3456789012345678901234567890123456789012"
+    contractAddress: "0x3456789012345678901234567890123456789012",
+    applyUrl: "/culturalheritage"
   },
   {
     id: 4,
