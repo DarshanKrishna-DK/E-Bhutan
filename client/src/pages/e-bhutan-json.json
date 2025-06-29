@@ -1,0 +1,10 @@
+{
+  "name": "Bhutan Digital Resident",
+  "description": "Verified identity for Bhutan's e-residency program.",
+  "image": "https://sharp-indigo-basilisk.myfilebase.com/ipfs/QmTY6BB5HFbiRCXRHpaREX5h97AtwzGxP9TK4geaaFha4L",
+  "attributes": [
+    { "trait_type": "Tier", "value": "Young Dragon" },
+    { "trait_type": "Cultural Score", "value": 420 },
+    { "trait_type": "Wallet Address", "value": "0x53f56F37e148A028a044521FEfc688623F6F08e4" }
+  ]
+}

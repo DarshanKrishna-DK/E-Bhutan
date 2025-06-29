@@ -17,6 +17,7 @@ import { z } from "zod";
 import { BuddhaFace, Stupa, LotusPattern } from "@/components/cultural-patterns";
 import { Progress } from "@/components/ui/progress";
 import { ethers } from "ethers";
+import mockData from "./e-bhutan-json.json";
 
 // Update schema to match new fields
 const formSchema = z.object({
@@ -60,7 +61,6 @@ type FormData = z.infer<typeof formSchema>;
 const NFT_CONTRACT_ADDRESS = "0x5DB36DeF86D9458eEdF84305fA02D96635924A6e";
 const NFT_ABI = [
   // Minimal ERC721 ABI for minting
-  [
 	{
 		"inputs": [
 			{
@@ -711,8 +711,7 @@ const NFT_ABI = [
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
-	}
-],
+	},
 ];
 
 export default function Residency() {
@@ -805,23 +804,23 @@ export default function Residency() {
 
   // Mint NFT function
   async function mintNFT(toAddress: string, uniqueId: string) {
-    if (!window.ethereum) {
-      alert("MetaMask is not installed.");
-      return;
-    }
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    const contract = new ethers.Contract(NFT_CONTRACT_ADDRESS, NFT_ABI, signer);
-
-    // Use a unique tokenId (for demo, use Date.now(); in production, use a better unique value)
-    const tokenId = Date.now();
-    const tx = await contract.mint(toAddress, tokenId);
-    await tx.wait();
-    toast({
-      title: "NFT Minted",
-      description: `NFT with ID ${tokenId} minted to ${toAddress}`,
-    });
+  if (!window.ethereum) {
+    alert("MetaMask is not installed.");
+    return;
   }
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  const contract = new ethers.Contract(NFT_CONTRACT_ADDRESS, NFT_ABI, signer);
+
+  // Use a unique URI or just an empty string if not needed
+  const uri = uniqueId || "";
+  const tx = await contract.safeMint(toAddress, uri);
+  await tx.wait();
+  toast({
+    title: "NFT Minted",
+    description: `NFT minted to ${toAddress}`,
+  });
+}
 
   // Show approval popup on submit
   const onSubmit = (data: FormData) => {
@@ -831,11 +830,27 @@ export default function Residency() {
   };
 
   // Add this function for future code
-  const handleConfirmedSubmit = (data: FormData) => {
-    // TODO: Add your future code here
-    // For now, just close the popup
-    setShowApproval(false);
-  };
+  const handleConfirmedSubmit = async () => {
+  setShowApproval(false);
+  try {
+    // Optionally submit mockData to backend if needed
+    // await applyMutation.mutateAsync(mockData);
+
+    // Mint NFT using data from mock.json
+    await mintNFT(mockData.wallet, mockData.email);
+
+    toast({
+      title: "Success",
+      description: "NFT minted using mock.json data!",
+    });
+  } catch (error: any) {
+    toast({
+      title: "Error",
+      description: error.message || "Something went wrong.",
+      variant: "destructive",
+    });
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 relative overflow-hidden">
@@ -1067,7 +1082,7 @@ export default function Residency() {
                       </div>
                     )}
 
-                    {currentStep === 2 && (
+                    {/* {currentStep === 2 && (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold">Personal Information</h3>
                         <div className="grid md:grid-cols-2 gap-4">
@@ -1345,7 +1360,7 @@ export default function Residency() {
                           )}
                         />
                       </div>
-                    )}
+                    )} */}
 
                     {currentStep === 6 && (
                       <div className="space-y-4">
