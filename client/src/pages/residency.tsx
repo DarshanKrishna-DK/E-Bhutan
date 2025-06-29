@@ -830,6 +830,13 @@ export default function Residency() {
       setShowApproval(true);
   };
 
+  // Add this function for future code
+  const handleConfirmedSubmit = (data: FormData) => {
+    // TODO: Add your future code here
+    // For now, just close the popup
+    setShowApproval(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 relative overflow-hidden">
       {/* Buddhist Background Elements */}
@@ -1427,13 +1434,16 @@ export default function Residency() {
                         </Button>
                       ) : (
                         <Button
-  type="button"
-  disabled={applyMutation.isPending}
-  className="bhutan-gradient text-white"
-  onClick={() => form.handleSubmit(onSubmit)()}
->
-  {applyMutation.isPending ? "Submitting..." : "Submit Application"}
-</Button>
+                          type="button"
+                          disabled={applyMutation.isPending}
+                          className="bhutan-gradient text-white"
+                          onClick={() => {
+                            setPendingData(form.getValues());
+                            setShowApproval(true);
+                          }}
+                        >
+                          {applyMutation.isPending ? "Submitting..." : "Submit Application"}
+                        </Button>
                       )}
                     </div>
                   </form>
@@ -1443,24 +1453,20 @@ export default function Residency() {
           </div>
         )}
 
-        {/* Approval Popup */}
+        {/* Confirmation Popup */}
         {showApproval && pendingData && (
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-8 shadow-lg max-w-md w-full">
-              <h2 className="text-xl font-bold mb-4">Approve Residency Application</h2>
-              <p>Do you want to approve this application and mint an NFT?</p>
+              <h2 className="text-xl font-bold mb-4">Confirm Submission</h2>
+              <p>Do you want to confirm your residency application?</p>
               <div className="flex justify-end gap-4 mt-6">
                 <Button variant="outline" onClick={() => setShowApproval(false)}>
                   Cancel
                 </Button>
                 <Button
-                  onClick={async () => {
-                    setShowApproval(false);
-                    await mintNFT(pendingData.wallet, pendingData.email);
-                    applyMutation.mutate(pendingData);
-                  }}
+                  onClick={() => handleConfirmedSubmit(pendingData)}
                 >
-                  Approve & Mint NFT
+                  Confirm
                 </Button>
               </div>
             </div>
