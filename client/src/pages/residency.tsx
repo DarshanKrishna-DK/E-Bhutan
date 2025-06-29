@@ -825,8 +825,9 @@ export default function Residency() {
 
   // Show approval popup on submit
   const onSubmit = (data: FormData) => {
-    setPendingData(data);
-    setShowApproval(true);
+      console.log("onSubmit called", data);
+      setPendingData(data);
+      setShowApproval(true);
   };
 
   return (
@@ -1425,13 +1426,14 @@ export default function Residency() {
                           Next
                         </Button>
                       ) : (
-                        <Button 
-                          type="submit" 
-                          disabled={applyMutation.isPending}
-                          className="bhutan-gradient text-white"
-                        >
-                          {applyMutation.isPending ? "Submitting..." : "Submit Application"}
-                        </Button>
+                        <Button
+  type="button"
+  disabled={applyMutation.isPending}
+  className="bhutan-gradient text-white"
+  onClick={() => form.handleSubmit(onSubmit)()}
+>
+  {applyMutation.isPending ? "Submitting..." : "Submit Application"}
+</Button>
                       )}
                     </div>
                   </form>
