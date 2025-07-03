@@ -1082,7 +1082,7 @@ export default function Residency() {
                       </div>
                     )}
 
-                    {/* {currentStep === 2 && (
+                    {currentStep === 2 && (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold">Personal Information</h3>
                         <div className="grid md:grid-cols-2 gap-4">
@@ -1360,7 +1360,7 @@ export default function Residency() {
                           )}
                         />
                       </div>
-                    )} */}
+                    )}
 
                     {currentStep === 6 && (
                       <div className="space-y-4">

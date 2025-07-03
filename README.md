@@ -4,6 +4,8 @@
 
 Digital Bhutan is a comprehensive digital-first nation platform designed to connect citizens, businesses, and government services through blockchain integration, gamification, and modern web technologies. The platform features NFT-based digital identity, a cultural learning system with brownie points, job portals, marketplace functionality, and mini-apps ecosystem.
 
+Demo: https://youtu.be/mmrbJWAHpEs?si=SjY1VsZCTTlzpgkU
+
 ## System Architecture
 
 The application follows a full-stack TypeScript architecture with clear separation between client and server components:

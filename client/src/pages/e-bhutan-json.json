@@ -1,7 +1,7 @@
 {
   "name": "Bhutan Digital Resident",
   "description": "Verified identity for Bhutan's e-residency program.",
-  "image": "...",
+  "image": "https://sharp-indigo-basilisk.myfilebase.com/ipfs/QmTY6BB5HFbiRCXRHpaREX5h97AtwzGxP9TK4geaaFha4L",
   "wallet": "0x53f56F37e148A028a044521FEfc688623F6F08e4",
   "attributes": [
     { "trait_type": "Tier", "value": "Young Dragon" },
